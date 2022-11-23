@@ -111,7 +111,7 @@ with open('film_title.json') as titles_json:
         f.write("INSERT INTO directors (director, yearofbirth) VALUES\n")
         first_run = True
         for d in ALL_DIRECTORS:
-            first_run = False if first_run else f.write(",\n")
+            first_run = False if first_run == True else f.write(f',\n')
             f.write(f'(\'{d.name}\', {d.yearofbirth})')
             bar()
 
@@ -119,7 +119,7 @@ with open('film_title.json') as titles_json:
             ";\n\nINSERT INTO movies (title, year, director, budget, gross) VALUES\n")
         first_run = True
         for r in records:
-            first_run = False if first_run else f.write(",\n")
+            first_run = False if first_run == True else f.write(f',\n')
             f.write(
                 f'(\'{r.movie}\', {r.movie_year}, \'{r.director.name}\', {r.budget},{r.gross})')
             bar()
@@ -127,7 +127,7 @@ with open('film_title.json') as titles_json:
         f.write("\nINSERT INTO movieawards (title, year, award, result) VALUES\n")
         first_run = True
         for a in ALL_MOVIE_AWARDS:
-            first_run = False if first_run else f.write(",\n")
+            first_run = False if first_run == True else f.write(f',\n')
             f.write(
                 f'(\'{a.title}\', {a.year}, \'{a.award}\', \'{a.result}\')')
             bar()
@@ -135,7 +135,7 @@ with open('film_title.json') as titles_json:
         f.write("\nINSERT INTO directorawards (director, year, award, result) VALUES\n")
         first_run = True
         for a in ALL_DIRECTOR_AWARDS:
-            first_run = False if first_run else f.write(",\n")
+            first_run = False if first_run == True else f.write(f',\n')
             f.write(
                 f'(\'{a.director.name}\', {a.year}, \'{a.award}\', \'{a.result}\')')
             bar()
