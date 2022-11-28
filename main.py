@@ -104,10 +104,8 @@ with open('film_title.json') as titles_json:
     # Write queries
 
     sum = len(ALL_DIRECTORS) + len(ALL_MOVIE_AWARDS) + len(ALL_DIRECTOR_AWARDS) + len(records)
-    with alive_progress.alive_bar(sum, title="Writing on queries.txt...", bar='filling', spinner="classic") as bar:
-
-        f = open("queries.txt", "a")
-
+    with alive_progress.alive_bar(sum, title="Writing on queries.txt...", bar='filling', spinner="classic") as bar, \
+    open("queries.txt", "a") as f:
         for (table, values) in [
                 (dir.director, ALL_DIRECTORS),
                 (movie_record.movie_record, records),
@@ -124,5 +122,3 @@ with open('film_title.json') as titles_json:
                 f.write(f'({item.toValue()})')
                 bar()
             f.write(";\n\n")
-
-        f.close()
