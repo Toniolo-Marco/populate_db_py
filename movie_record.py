@@ -1,4 +1,8 @@
 class movie_record:
+    @staticmethod
+    def tableDefinition():
+        return 'movies (title, year, director, budget, gross)'
+
     def __init__(self, movie, movie_year, director, budget, gross, year_of_birth, movie_awards):
         self.movie = movie
         self.movie_year = movie_year
@@ -10,3 +14,6 @@ class movie_record:
 
     def __repr__(self):
         return str(self.movie)
+
+    def toValue(self):
+        return f'\'{self.movie}\', {self.movie_year}, \'{self.director.name}\', {self.budget}, {self.gross}'
