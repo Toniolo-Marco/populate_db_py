@@ -106,12 +106,17 @@ with open('film_title.json') as titles_json:
     sum = len(ALL_DIRECTORS) + len(ALL_MOVIE_AWARDS) + len(ALL_DIRECTOR_AWARDS) + len(records)
     with alive_progress.alive_bar(sum, title="Writing on queries.txt...", bar='filling', spinner="classic") as bar, \
     open("queries.txt", "a") as f:
+        first_insert = True
         for (table, values) in [
                 (dir.director, ALL_DIRECTORS),
                 (movie_record.movie_record, records),
                 (movie_award.movie_award, ALL_MOVIE_AWARDS),
                 (director_award.director_award, ALL_DIRECTOR_AWARDS)
                 ]:
+            if first_insert:
+                first_insert = False
+            else:
+                f.write("\n\n")
             f.write(f"INSERT INTO {table.tableDefinition()} VALUES\n")
             first = True
             for item in values:
@@ -121,4 +126,4 @@ with open('film_title.json') as titles_json:
                     f.write(",\n")
                 f.write(f'({item.toValue()})')
                 bar()
-            f.write(";\n\n")
+            f.write(";")
