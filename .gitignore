@@ -1,2 +1,10 @@
 __pycache__/
 .vscode/
+queries.txt
+*.pyc
+
+# venv Virtual Environment
+/bin/
+/lib/
+/lib64
+/pyvenv.cfg

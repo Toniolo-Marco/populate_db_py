@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import json
 import names
 import random
@@ -102,42 +103,27 @@ with open('film_title.json') as titles_json:
 
     # Write queries
 
-    sum = ALL_DIRECTORS.__len__() + ALL_MOVIE_AWARDS.__len__() + \
-        ALL_DIRECTOR_AWARDS.__len__() + records.__len__()
-    with alive_progress.alive_bar(sum, title="Writing on queries.txt...", bar='filling', spinner="classic") as bar:
-
-        f = open("queries.txt", "a")
-
-        f.write("INSERT INTO directors (director, yearofbirth) VALUES\n")
-        first_run = True
-        for d in ALL_DIRECTORS:
-            first_run = False if first_run == True else f.write(f',\n')
-            f.write(f'(\'{d.name}\', {d.yearofbirth})')
-            bar()
-
-        f.write(
-            ";\n\nINSERT INTO movies (title, year, director, budget, gross) VALUES\n")
-        first_run = True
-        for r in records:
-            first_run = False if first_run == True else f.write(f',\n')
-            f.write(
-                f'(\'{r.movie}\', {r.movie_year}, \'{r.director.name}\', {r.budget},{r.gross})')
-            bar()
-
-        f.write("\nINSERT INTO movieawards (title, year, award, result) VALUES\n")
-        first_run = True
-        for a in ALL_MOVIE_AWARDS:
-            first_run = False if first_run == True else f.write(f',\n')
-            f.write(
-                f'(\'{a.title}\', {a.year}, \'{a.award}\', \'{a.result}\')')
-            bar()
-
-        f.write("\nINSERT INTO directorawards (director, year, award, result) VALUES\n")
-        first_run = True
-        for a in ALL_DIRECTOR_AWARDS:
-            first_run = False if first_run == True else f.write(f',\n')
-            f.write(
-                f'(\'{a.director.name}\', {a.year}, \'{a.award}\', \'{a.result}\')')
-            bar()
-
-        f.close()
+    sum = len(ALL_DIRECTORS) + len(ALL_MOVIE_AWARDS) + len(ALL_DIRECTOR_AWARDS) + len(records)
+    with alive_progress.alive_bar(sum, title="Writing on queries.txt...", bar='filling', spinner="classic") as bar, \
+    open("queries.txt", "a") as f:
+        first_insert = True
+        for (table, values) in [
+                (dir.director, ALL_DIRECTORS),
+                (movie_record.movie_record, records),
+                (movie_award.movie_award, ALL_MOVIE_AWARDS),
+                (director_award.director_award, ALL_DIRECTOR_AWARDS)
+                ]:
+            if first_insert:
+                first_insert = False
+            else:
+                f.write("\n\n")
+            f.write(f"INSERT INTO {table.tableDefinition()} VALUES\n")
+            first = True
+            for item in values:
+                if first:
+                    first = False
+                else:
+                    f.write(",\n")
+                f.write(f'({item.toValue()})')
+                bar()
+            f.write(";")
